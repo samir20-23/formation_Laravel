@@ -46,15 +46,12 @@ class User extends Authenticatable
         ];
     }
 
-
-
     public function articles()
     {
         return $this->hasMany(Article::class);
     }
 
-    public function profile()
-    {
-        return $this->belongsTo(Profile::class);
+    public function profile() {
+        return $this->hasOne(Profile::class);
     }
 }
