@@ -2,7 +2,7 @@
 </dev>
 <div id="badges"  align="center">
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=63CF15&lines=a+d+m+i+n+L+t+e)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=63CF15&lines=L+a+r+v+e+l++a+d+m+i+n+L+t+e)](https://git.io/typing-svg)
   
   </div>
 
