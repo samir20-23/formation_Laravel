@@ -2,15 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use Illuminate\Database\Seeder;
+use App\Models\Category;
+use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
     public function run()
     {
-        Category::create(['name' => 'Technology']);
-        Category::create(['name' => 'Health']);
-        Category::create(['name' => 'Lifestyle']);
+        // Example categories
+        $categories = ['Tech', 'Web Development', 'Mobile Development', 'Design', 'SEO'];
+
+        foreach ($categories as $category) {
+            Category::create([
+                'name' => $category,
+                'slug' => Str::slug($category),  // Generate a slug from the name
+            ]);
+        }
     }
 }

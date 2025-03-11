@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->engine = 'InnoDB'; // Explicitly setting InnoDB engine
             $table->id();
             $table->string('name')->unique();
-            $table->string('slug')->unique();
+            $table->string('slug')->default('default-slug');
             $table->timestamps();
         });
         

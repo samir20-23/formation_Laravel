@@ -6,25 +6,21 @@ use App\Models\Category;
 
 class CategoryService
 {
-    // Get all categories
     public function getAllCategories()
     {
         return Category::all();
     }
 
-    // Create a new category
-    public function createCategory(array $data)
+    public function createCategory($data)
     {
         return Category::create($data);
     }
 
-    // Update an existing category
-    public function updateCategory(Category $category, array $data)
+    public function updateCategory(Category $category, $data)
     {
         return $category->update($data);
     }
 
-    // Delete a category
     public function deleteCategory(Category $category)
     {
         return $category->delete();
