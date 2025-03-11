@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Category;
 
 class PostController extends Controller
 {
@@ -24,8 +25,17 @@ class PostController extends Controller
     // Show form to create a post
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all(); 
+        return view('posts.create', compact('categories'));
     }
+    
+    public function edit($id)
+    {
+        $post = Post::findOrFail($id);
+        $categories = Category::all(); 
+        return view('posts.edit', compact('post', 'categories'));
+    }
+    
 
     // Store a new post
     public function store(Request $request)
@@ -48,10 +58,7 @@ class PostController extends Controller
     }
 
     // Show form to edit a post
-    public function edit(Post $post)
-    {
-        return view('posts.edit', compact('post'));
-    }
+ 
 
     // Update an existing post
     public function update(Request $request, Post $post)
