@@ -1,6 +1,5 @@
-<div>
-</dev>
-  
+
+
  [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=da3b29&lines=L+a+r+v+e+l)](https://git.io/typing-svg)
  
 <div id="header" align="center">
