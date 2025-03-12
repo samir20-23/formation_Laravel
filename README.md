@@ -2,12 +2,18 @@
 </dev>
 <div id="badges"  align="center">
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=63CF15&lines=L+a+r+v+e+l++A+d+m+i+n+L+t+e)](https://git.io/typing-svg)
-  
+
   </div>
+<div id="header" align="center">
 
+ [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=da3b29&lines=L+a+r+v+e+l)](https://git.io/typing-svg)
+  
+</div>
 
-
+<div id="header" align="center">
+  <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWVqMGJrdDgwNGIxdGxkZ2V3Z21kNGhuengwaGIxZnQzZTQ3NXBiNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26DoiqmYcxgFICb3G/giphy.gif" width="340"/>
+       </a>
+</div>
 
 Here are the steps to create a Laravel project using AdminLTE and Laravel UI:
 
