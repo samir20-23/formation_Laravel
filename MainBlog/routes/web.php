@@ -16,3 +16,11 @@ Route::resource('tags', TagController::class);
 
 // Category Routes
 Route::resource('categories', CategoryController::class);
+
+
+//languages 
+
+Route::get('lang/{locale}', function ($locale) {
+    session(['locale' => $locale]);
+    return redirect()->back();
+});
