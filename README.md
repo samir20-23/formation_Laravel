@@ -2,6 +2,8 @@
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=da3b29&lines=L+a+r+v+e+l)](https://git.io/typing-svg)
 
+![Advanced Laravel Repository](https://rivo.agency/wp-content/uploads/2022/05/Image7.png)
+
 Laravel is a robust and modern PHP framework designed for building web applications. It provides a clean, elegant syntax and a set of tools for everything from routing and authentication to testing and database migrations. With its simplicity, flexibility, and powerful features, Laravel has become one of the most popular frameworks in the PHP community.
 
 ---
