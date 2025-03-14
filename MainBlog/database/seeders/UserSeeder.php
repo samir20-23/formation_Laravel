@@ -9,12 +9,24 @@ use Illuminate\Support\Facades\Hash;
 class UserSeeder extends Seeder
 {
     public function run()
-    {
-        // Ensure that there's at least one user in the database
+    { 
         User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'), // Make sure to hash the password
+            'name' => 'samir',
+            'email' => 'samir@gmail.com',
+            'password' => Hash::make('samir123'),  
+            'role' => 'admin',
+        ]);
+        User::create([
+            'name' => 'samir1',
+            'email' => 'samir1@gmail.com',
+            'password' => Hash::make('samir123'),  
+            'role' => 'admin',
+        ]);
+        User::create([
+            'name' => 'samir2',
+            'email' => 'samir2@gmail.com',
+            'password' => Hash::make('samir123'),  
+            'role' => 'admin',
         ]);
     }
 }

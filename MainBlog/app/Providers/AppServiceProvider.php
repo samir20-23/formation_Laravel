@@ -21,5 +21,4 @@ class AppServiceProvider extends ServiceProvider
     {
         app()->setLocale(session('locale', 'en'));
     }
-    
 }
