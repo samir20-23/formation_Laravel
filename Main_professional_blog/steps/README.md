@@ -1,66 +1,213 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+```markdown
+# README
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Multi-Language
 
-## About Laravel
+### resources/lang/en/messages.php
+```php
+<?php
+return [
+    'welcome' => 'Welcome to our application',
+    'login'   => 'Please log in',
+    'logout'  => 'Log out',
+];
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### resources/lang/fr/messages.php
+```php
+<?php
+return [
+    'welcome' => 'Bienvenue dans notre application',
+    'login'   => 'Veuillez vous connecter',
+    'logout'  => 'Se déconnecter',
+];
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### app/Providers/AppServiceProvider.php
+```php
+<?php
+namespace App\Providers;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+class AppServiceProvider extends ServiceProvider
+{
+    public function register(): void {}
+    public function boot()
+    {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+    }
+}
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### routes/web.php (Language Switch)
+```php
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'fr'])) {
+        Session::put('locale', $locale);
+        App::setLocale($locale);
+    }
+    return redirect()->back();
+});
+```
 
-## Learning Laravel
+## Policy
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Create Policy (Command)
+```bash
+php artisan make:policy PostPolicy --model=Post
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### app/Policies/PostPolicy.php
+```php
+<?php
+namespace App\Policies;
+use App\Models\User;
+use App\Models\Post;
+class PostPolicy
+{
+    public function update(User $user, Post $post)
+    {
+        return $user->id === $post->user_id;
+    }
+    public function delete(User $user, Post $post)
+    {
+        return $user->id === $post->user_id;
+    }
+}
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### app/Providers/AuthServiceProvider.php
+```php
+<?php
+namespace App\Providers;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\Post;
+use App\Policies\PostPolicy;
+class AuthServiceProvider extends ServiceProvider
+{
+    protected $policies = [
+        Post::class => PostPolicy::class,
+    ];
+    public function boot()
+    {
+        $this->registerPolicies();
+    }
+}
+```
 
-## Laravel Sponsors
+## Request System
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Create Request (Command)
+```bash
+php artisan make:request StorePostRequest
+```
 
-### Premium Partners
+### app/Http/Requests/StorePostRequest.php
+```php
+<?php
+namespace App\Http\Requests;
+use Illuminate\Foundation\Http\FormRequest;
+class StorePostRequest extends FormRequest
+{
+    public function authorize()
+    {
+        return true;
+    }
+    public function rules()
+    {
+        return [
+            'title' => 'required|max:255',
+            'body'  => 'required',
+        ];
+    }
+}
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### app/Http/Controllers/PostController.php (Store)
+```php
+<?php
+namespace App\Http\Controllers;
+use App\Http\Requests\StorePostRequest;
+use App\Models\Post;
+class PostController extends Controller
+{
+    public function store(StorePostRequest $request)
+    {
+        Post::create($request->validated());
+        return redirect()->route('posts.index');
+    }
+}
+```
 
-## Contributing
+## Modular Import/Export
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Install Package (Command)
+```bash
+composer require maatwebsite/excel
+```
 
-## Code of Conduct
+### Create Export (Command)
+```bash
+php artisan make:export PostsExport --model=Post
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### app/Exports/PostsExport.php
+```php
+<?php
+namespace App\Exports;
+use App\Models\Post;
+use Maatwebsite\Excel\Concerns\FromCollection;
+class PostsExport implements FromCollection
+{
+    public function collection()
+    {
+        return Post::all();
+    }
+}
+```
 
-## Security Vulnerabilities
+### Create Import (Command)
+```bash
+php artisan make:import PostsImport --model=Post
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### app/Imports/PostsImport.php
+```php
+<?php
+namespace App\Imports;
+use App\Models\Post;
+use Maatwebsite\Excel\Concerns\ToModel;
+class PostsImport implements ToModel
+{
+    public function model(array $row)
+    {
+        return new Post([
+            'title' => $row[0],
+            'body'  => $row[1],
+        ]);
+    }
+}
+```
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### app/Http/Controllers/PostController.php (Import/Export)
+```php
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PostsExport;
+use App\Imports\PostsImport;
+class PostController extends Controller
+{
+    public function export()
+    {
+        return Excel::download(new PostsExport, 'posts.xlsx');
+    }
+    public function import()
+    {
+        Excel::import(new PostsImport, request()->file('file'));
+        return redirect()->route('posts.index');
+    }
+}
+```
